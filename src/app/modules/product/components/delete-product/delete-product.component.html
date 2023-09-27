@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Eliminar Producto</h2>
+
+<div mat-dialog-content>
+  ¿Estás seguro de que deseas eliminar este producto?
+</div>
+
+<div mat-dialog-actions class="flex gap-8 py-9">
+  <button mat-button (click)="onCancel()" matRipple>Cancelar</button>
+  <button mat-raised-button color="warn" (click)="onDelete()" matRipple>
+    Eliminar
+  </button>
+</div>
