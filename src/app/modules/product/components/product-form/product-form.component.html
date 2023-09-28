@@ -1,0 +1,169 @@
+<form
+  [formGroup]="productForm"
+  (ngSubmit)="onSubmit()"
+  class="example-form bg-slate-200 p-8 rounded-lg shadow-md max-w-4xl mx-auto mt-6"
+>
+  <div class="flex flex-wrap gap-6">
+    <!-- Nombre del producto -->
+    <mat-form-field class="w-full">
+      <mat-label>Nombre</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="name"
+        [errorStateMatcher]="matcher"
+      />
+      <mat-error
+        *ngIf="
+          productForm.controls.name.invalid && productForm.controls.name.touched
+        "
+      >
+        El nombre es requerido.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Descripción del producto -->
+    <mat-form-field class="w-full">
+      <mat-label>Descripción</mat-label>
+      <textarea
+        matInput
+        formControlName="description"
+        [errorStateMatcher]="matcher"
+      ></textarea>
+      <mat-error
+        *ngIf="
+          productForm.controls.description.invalid &&
+          productForm.controls.description.touched
+        "
+      >
+        La descripción es requerida.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- SKU -->
+    <mat-form-field class="w-full">
+      <mat-label>SKU</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="sku"
+        [errorStateMatcher]="matcher"
+      />
+      <mat-error
+        *ngIf="
+          productForm.controls.sku.invalid && productForm.controls.sku.touched
+        "
+      >
+        El SKU es requerido.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- URL de la imagen -->
+    <mat-form-field class="w-full">
+      <mat-label>URL de la imagen</mat-label>
+      <input
+        type="text"
+        matInput
+        formControlName="imageUrl"
+        [errorStateMatcher]="matcher"
+      />
+      <mat-error
+        *ngIf="
+          productForm.controls.imageUrl.invalid &&
+          productForm.controls.imageUrl.touched
+        "
+      >
+        La URL de la imagen es requerida.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Precio -->
+    <mat-form-field class="w-full self-start">
+      <mat-label>Precio</mat-label>
+      <input
+        type="number"
+        matInput
+        formControlName="price"
+        [errorStateMatcher]="matcher"
+      />
+      <mat-error
+        *ngIf="
+          productForm.controls.price.invalid &&
+          productForm.controls.price.touched &&
+          productForm.controls.price.hasError('required')
+        "
+      >
+        El precio es requerido y debe ser mayor que 0.
+      </mat-error>
+      <mat-error
+        *ngIf="
+          productForm.controls.price.hasError('pattern') &&
+          productForm.controls.price.touched
+        "
+      >
+        Introduzca el precio en formato correcto (Ejemplo: 1234.56).
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Stock -->
+    <mat-form-field class="w-full self-start">
+      <mat-label>Stock</mat-label>
+      <input
+        type="number"
+        matInput
+        formControlName="stock"
+        [errorStateMatcher]="matcher"
+      />
+      <mat-error
+        *ngIf="
+          productForm.controls.stock.invalid &&
+          productForm.controls.stock.touched
+        "
+      >
+        El stock es requerido y debe ser mayor que 0.
+      </mat-error>
+      <mat-error
+        *ngIf="
+          productForm.controls.stock.hasError('pattern') &&
+          productForm.controls.stock.touched
+        "
+      >
+        Solo se permiten números enteros.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Tags del producto -->
+    <div class="col-span-2">
+      <div formArrayName="tags" class="space-y-4">
+        <div
+          *ngFor="let tagControl of tags.controls; let i = index"
+          class="flex items-center space-x-4"
+        >
+          <mat-form-field class="flex-grow">
+            <mat-label>Tag {{ i + 1 }}</mat-label>
+            <input
+              [formControlName]="i"
+              matInput
+              [errorStateMatcher]="matcher"
+            />
+          </mat-form-field>
+          <button mat-button type="button" (click)="removeTag(i)">
+            Eliminar
+          </button>
+        </div>
+      </div>
+      <button
+        type="button"
+        (click)="addTag()"
+        class="bg-blue-500 text-white font-bold px-4 py-2 my-4 rounded"
+      >
+        Agregar Tag
+      </button>
+    </div>
+  </div>
+
+  <!-- Botón de enviar -->
+  <button mat-raised-button type="submit" [disabled]="productForm.invalid">
+    Enviar
+  </button>
+</form>
