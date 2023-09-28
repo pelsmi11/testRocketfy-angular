@@ -164,7 +164,7 @@ export class ProductFormComponent {
       description: formData.description || '',
       sku: formData.sku || '',
       imageUrl: formData.imageUrl || '',
-      tags: this.selectedTags || [],
+      tags: formData.tags || this.selectedTags || [],
       price:
         typeof formData.price === 'string'
           ? parseFloat(formData.price)
