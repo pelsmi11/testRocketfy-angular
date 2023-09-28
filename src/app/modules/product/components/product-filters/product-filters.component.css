@@ -1,0 +1,11 @@
+.menu-content {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+}
+
+.menu-item {
+  padding: 16px;
+  display: block;
+  width: 100%;
+}

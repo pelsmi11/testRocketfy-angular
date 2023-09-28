@@ -1,1 +1,52 @@
-<p>product-filters works!</p>
+<button
+  mat-icon-button
+  [matMenuTriggerFor]="filterMenu"
+  aria-label="Filter Menu"
+  class="bg-blue-500 w-24 h-8"
+>
+  <mat-icon>filter_list</mat-icon>
+</button>
+
+<mat-menu #filterMenu="matMenu">
+  <div class="menu-content" (click)="$event.stopPropagation()">
+    <div class="menu-item">
+      <mat-form-field class="full-width">
+        <mat-label>Buscar</mat-label>
+        <input
+          type="text"
+          matInput
+          [(ngModel)]="searchParam"
+          (ngModelChange)="applyFilters()"
+          (click)="$event.stopPropagation()"
+        />
+      </mat-form-field>
+    </div>
+
+    <div class="menu-item">
+      <mat-form-field class="full-width">
+        <mat-label>Precio</mat-label>
+        <mat-select
+          [(ngModel)]="selectedPrice"
+          (ngModelChange)="applyFilters()"
+          (click)="$event.stopPropagation()"
+        >
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="0-500">Menor a 500</mat-option>
+          <mat-option value="500-1000">De 500 a 1000</mat-option>
+          <mat-option value="1000-+">Mayor a 1000</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="menu-item">
+      <div *ngFor="let tag of tagsList">
+        <mat-checkbox
+          [(ngModel)]="tag.completed"
+          (ngModelChange)="applyFilters()"
+          (click)="$event.stopPropagation()"
+          >{{ tag.name }}</mat-checkbox
+        >
+      </div>
+    </div>
+  </div>
+</mat-menu>

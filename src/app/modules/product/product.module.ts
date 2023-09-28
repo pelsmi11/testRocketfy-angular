@@ -8,14 +8,16 @@ import { ProductDetailComponent } from './components/product-detail/product-deta
 import { DeleteProductComponent } from './components/delete-product/delete-product.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ProductFormComponent } from './components/product-form/product-form.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { NewProductComponent } from '../pages/components/new-product/new-product.component';
 import { ProductFiltersComponent } from './components/product-filters/product-filters.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-
+import { MatMenuModule } from '@angular/material/menu';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSelectModule } from '@angular/material/select';
 const routes: Routes = [
   { path: 'product/:id', component: DetailPageComponent },
   { path: 'update-product/:id', component: NewProductComponent },
@@ -39,12 +41,17 @@ const routes: Routes = [
     MatFormFieldModule,
     MatCheckboxModule,
     MatButtonModule,
+    FormsModule,
+    MatMenuModule,
+    MatIconModule,
+    MatSelectModule,
   ],
   exports: [
     ProductListComponent,
     ProductDetailComponent,
     DeleteProductComponent,
     ProductFormComponent,
+    ProductFiltersComponent,
   ],
 })
 export class ProductModule {}
