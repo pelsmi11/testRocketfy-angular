@@ -13,6 +13,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { NewProductComponent } from '../pages/components/new-product/new-product.component';
+import { ProductFiltersComponent } from './components/product-filters/product-filters.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const routes: Routes = [
   { path: 'product/:id', component: DetailPageComponent },
@@ -25,6 +27,7 @@ const routes: Routes = [
     ProductDetailComponent,
     DeleteProductComponent,
     ProductFormComponent,
+    ProductFiltersComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +37,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatInputModule,
     MatFormFieldModule,
+    MatCheckboxModule,
     MatButtonModule,
   ],
   exports: [

@@ -134,31 +134,19 @@
 
     <!-- Tags del producto -->
     <div class="col-span-2">
-      <div formArrayName="tags" class="space-y-4">
-        <div
-          *ngFor="let tagControl of tags.controls; let i = index"
-          class="flex items-center space-x-4"
-        >
-          <mat-form-field class="flex-grow">
-            <mat-label>Tag {{ i + 1 }}</mat-label>
-            <input
-              [formControlName]="i"
-              matInput
-              [errorStateMatcher]="matcher"
-            />
-          </mat-form-field>
-          <button mat-button type="button" (click)="removeTag(i)">
-            Eliminar
-          </button>
-        </div>
+      <div class="w-full">
+        <ul>
+          <li *ngFor="let tag of tagsList">
+            <mat-checkbox
+              [checked]="tag.completed"
+              [color]="tag.color"
+              (change)="toggleTagSelection(tag)"
+            >
+              {{ tag.name }}
+            </mat-checkbox>
+          </li>
+        </ul>
       </div>
-      <button
-        type="button"
-        (click)="addTag()"
-        class="bg-blue-500 text-white font-bold px-4 py-2 my-4 rounded"
-      >
-        Agregar Tag
-      </button>
     </div>
   </div>
 

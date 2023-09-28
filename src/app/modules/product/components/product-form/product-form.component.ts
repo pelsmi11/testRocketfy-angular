@@ -10,6 +10,7 @@ import { MyErrorStateMatcher } from '../../helpers/MyErrorStateMatcher';
 import { ProductService } from '../../services/product.service';
 import { ProductPayload } from '../../interfaces/ProductPayload.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Tag } from '../../interfaces/tag.interface';
 
 @Component({
   selector: 'app-product-form',
@@ -18,6 +19,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class ProductFormComponent {
   productId: string | null = '';
+  tagsList: Tag[] = [
+    { name: 'technology', completed: false, color: 'accent' },
+    { name: 'clothing', completed: false, color: 'primary' },
+    { name: 'food', completed: false, color: 'warn' },
+  ];
+
+  allTagsSelected: boolean = false;
+  selectedTags: string[] = [];
+
   productForm = new FormGroup({
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -107,6 +117,12 @@ export class ProductFormComponent {
             : '',
       });
 
+      this.tagsList.forEach((tagItem) => {
+        if (product.tags.includes(tagItem.name)) {
+          tagItem.completed = true;
+        }
+      });
+
       const tagsFC = product.tags.map((tag) => this.fb.control(tag));
       this.tags.clear();
       tagsFC.forEach((control) => this.tags.push(control));
@@ -115,6 +131,10 @@ export class ProductFormComponent {
 
   get tags() {
     return this.productForm.get('tags') as FormArray;
+  }
+
+  generateSKU(name: string): string {
+    return encodeURIComponent(name.replace(/\s+/g, '_')).slice(0, 30);
   }
 
   addTag() {
@@ -126,8 +146,15 @@ export class ProductFormComponent {
     this.tags.removeAt(index);
   }
 
-  generateSKU(name: string): string {
-    return encodeURIComponent(name.replace(/\s+/g, '_')).slice(0, 30);
+  updateAllTagsSelected() {
+    this.selectedTags = this.tagsList
+      .filter((tag) => tag.completed)
+      .map((tag) => tag.name);
+  }
+
+  toggleTagSelection(tag: Tag) {
+    tag.completed = !tag.completed;
+    this.updateAllTagsSelected();
   }
 
   prepareDataForSubmission(): ProductPayload {
@@ -137,7 +164,7 @@ export class ProductFormComponent {
       description: formData.description || '',
       sku: formData.sku || '',
       imageUrl: formData.imageUrl || '',
-      tags: formData.tags || [],
+      tags: this.selectedTags || [],
       price:
         typeof formData.price === 'string'
           ? parseFloat(formData.price)
