@@ -44,9 +44,12 @@ export class ProductDetailComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        // Redirige al usuario a la ruta "/"
         this.router.navigate(['/']);
       }
     });
+  }
+
+  toUpdateProduct() {
+    this.router.navigate([`update-product/${this.productId}`]);
   }
 }

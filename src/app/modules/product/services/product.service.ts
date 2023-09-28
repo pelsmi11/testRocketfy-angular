@@ -27,4 +27,8 @@ export class ProductService {
   createProduct(productData: ProductPayload) {
     return this.http.post(`${this.API_URL}/products`, productData);
   }
+
+  updateProduct(id: string, productData: ProductPayload) {
+    return this.http.put(`${this.API_URL}/products/${id}`, productData);
+  }
 }

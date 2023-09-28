@@ -9,6 +9,7 @@ import {
 import { MyErrorStateMatcher } from '../../helpers/MyErrorStateMatcher';
 import { ProductService } from '../../services/product.service';
 import { ProductPayload } from '../../interfaces/ProductPayload.interface';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-form',
@@ -16,6 +17,7 @@ import { ProductPayload } from '../../interfaces/ProductPayload.interface';
   styleUrls: ['./product-form.component.css'],
 })
 export class ProductFormComponent {
+  productId: string | null = '';
   productForm = new FormGroup({
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
@@ -39,25 +41,76 @@ export class ProductFormComponent {
 
   @Output() productSubmit = new EventEmitter<any>();
 
-  constructor(private fb: FormBuilder, private productService: ProductService) {
+  constructor(
+    private fb: FormBuilder,
+    private productService: ProductService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {
     this.productForm.get('name')!.valueChanges.subscribe((name) => {
       this.productForm.get('sku')!.setValue(this.generateSKU(name || ''));
     });
+    this.productId = this.route.snapshot.paramMap.get('id');
+    if (this.productId) {
+      this.loadProduct(this.productId);
+    }
   }
 
   onSubmit() {
     if (this.productForm.valid) {
+      const productId = this.route.snapshot.paramMap.get('id');
+      if (productId) {
+        this.productService
+          .updateProduct(productId, this.prepareDataForSubmission())
+          .subscribe(
+            (response) => {
+              console.log('Producto actualizado con éxito', response);
+              this.router.navigate([`/product/${this.productId}`]);
+            },
+            (error) => {
+              console.error('Error al actualizar el producto', error);
+            }
+          );
+        return;
+      }
       this.productService
         .createProduct(this.prepareDataForSubmission())
         .subscribe(
           (response) => {
             console.log('Producto creado con éxito', response);
+            this.router.navigate(['/']);
           },
           (error) => {
             console.error('Error al crear el producto', error);
           }
         );
     }
+  }
+  loadProduct(id: string) {
+    this.productService.getProductById(id).subscribe((product) => {
+      this.productForm.patchValue({
+        name: product.name,
+        description: product.description,
+        sku: product.sku,
+        imageUrl: product.imageUrl,
+        price:
+          typeof product.price === 'string'
+            ? product.price
+            : typeof product.price === 'number'
+            ? product.price + ''
+            : '',
+        stock:
+          typeof product.stock === 'string'
+            ? product.stock
+            : typeof product.stock === 'number'
+            ? product.stock + ''
+            : '',
+      });
+
+      const tagsFC = product.tags.map((tag) => this.fb.control(tag));
+      this.tags.clear();
+      tagsFC.forEach((control) => this.tags.push(control));
+    });
   }
 
   get tags() {

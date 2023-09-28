@@ -12,9 +12,11 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
+import { NewProductComponent } from '../pages/components/new-product/new-product.component';
 
 const routes: Routes = [
   { path: 'product/:id', component: DetailPageComponent },
+  { path: 'update-product/:id', component: NewProductComponent },
 ];
 
 @NgModule({
