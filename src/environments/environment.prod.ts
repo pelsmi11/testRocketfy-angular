@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://tu-url-de-produccion.com',
+  apiUrl: 'https://testrocketfy-backend-12hj-dev.fl0.io',
 };
