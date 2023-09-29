@@ -55,24 +55,6 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field class="w-full">
-      <mat-label>URL de la imagen</mat-label>
-      <input
-        type="text"
-        matInput
-        formControlName="imageUrl"
-        [errorStateMatcher]="matcher"
-      />
-      <mat-error
-        *ngIf="
-          productForm.controls.imageUrl.invalid &&
-          productForm.controls.imageUrl.touched
-        "
-      >
-        La URL de la imagen es requerida.
-      </mat-error>
-    </mat-form-field>
-
     <mat-form-field class="w-full self-start">
       <mat-label>Precio</mat-label>
       <input
@@ -141,6 +123,27 @@
         </ul>
       </div>
     </div>
+  </div>
+  <!-- Field for uploading image -->
+  <div class="my-4 relative w-full max-w-[250px]">
+    <input
+      type="file"
+      id="fileInput"
+      class="hidden"
+      (change)="onImageChange($event)"
+      accept="image/*"
+    />
+    <label
+      for="fileInput"
+      class="custom-file-label bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600"
+    >
+      Seleccionar imagen
+    </label>
+    <img
+      *ngIf="productForm.get('imageUrl')?.value"
+      [src]="productForm.get('imageUrl')?.value"
+      class="image-preview mt-4 w-48 h-48 object-cover"
+    />
   </div>
 
   <button mat-raised-button type="submit" [disabled]="productForm.invalid">

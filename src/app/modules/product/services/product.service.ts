@@ -5,6 +5,8 @@ import { GetProduct } from '../interfaces/getProduct.interface';
 import { DeleteProduct } from '../interfaces/deleteProduct.interface';
 import { ProductPayload } from '../interfaces/ProductPayload.interface';
 import { queryParams } from '../interfaces/queryParams.interface';
+import { IGetImageURL } from '../interfaces/getImageUrl';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -49,5 +51,10 @@ export class ProductService {
 
   updateProduct(id: string, productData: ProductPayload) {
     return this.http.put(`${this.API_URL}/products/${id}`, productData);
+  }
+
+  uploadImage(formData: FormData): Observable<IGetImageURL> {
+    const url = `${this.API_URL}/upload`;
+    return this.http.post<IGetImageURL>(url, formData);
   }
 }

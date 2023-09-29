@@ -32,7 +32,7 @@ export class ProductFormComponent {
     name: new FormControl('', Validators.required),
     description: new FormControl('', Validators.required),
     sku: new FormControl('', Validators.required),
-    imageUrl: new FormControl('', Validators.required),
+    imageUrl: new FormControl(''),
     tags: new FormArray([]),
     price: new FormControl('', [
       Validators.required,
@@ -156,15 +156,43 @@ export class ProductFormComponent {
     tag.completed = !tag.completed;
     this.updateAllTagsSelected();
   }
+  onImageChange(event: any) {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      const formData: FormData = new FormData();
+      formData.append('image', file);
+
+      this.productService.uploadImage(formData).subscribe(
+        (response) => {
+          // Set the imageUrl form control to the returned URL
+          this.productForm.get('imageUrl')!.setValue(response.imageUrls);
+        },
+        (error) => {
+          console.error('Error uploading image:', error);
+        }
+      );
+    }
+  }
 
   prepareDataForSubmission(): ProductPayload {
     const formData = this.productForm.value;
+    console.log({
+      tags: formData.tags,
+      selectedTags: this.selectedTags,
+    });
     return {
       name: formData.name || '',
       description: formData.description || '',
       sku: formData.sku || '',
       imageUrl: formData.imageUrl || '',
-      tags: formData.tags || this.selectedTags || [],
+      tags: formData.tags?.length
+        ? formData.tags
+        : this.selectedTags?.length
+        ? this.selectedTags
+        : [],
+
+      // tags: formData.tags || this.selectedTags || [],
       price:
         typeof formData.price === 'string'
           ? parseFloat(formData.price)
